@@ -9,8 +9,8 @@ export const useSocketStore = create((set, get) => ({
 
   connect: (token) => {
     if (get().socket?.connected) return;
-    // In production use Render backend URL, in dev use same origin
-    const serverUrl = import.meta.env.VITE_API_URL || window.location.origin;
+    const serverUrl = import.meta.env.VITE_API_URL
+      || (import.meta.env.PROD ? 'https://multimodal-doc-analyzer.onrender.com' : window.location.origin);
     const socket = io(serverUrl, { auth: { token }, transports: ['websocket', 'polling'] });
 
     socket.on('connect', () => {
