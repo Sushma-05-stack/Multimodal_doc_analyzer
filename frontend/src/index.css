@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --toast-bg: #ffffff;
+    --toast-color: #1f2937;
+    --toast-border: #e5e7eb;
+  }
+  .dark {
+    --toast-bg: #1e293b;
+    --toast-color: #f1f5f9;
+    --toast-border: #334155;
+  }
+
+  body {
+    @apply bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100;
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  html { scroll-behavior: smooth; }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-white/20 dark:border-slate-700/50;
+  }
+  .glass-card {
+    @apply glass rounded-2xl shadow-xl;
+  }
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600
+           text-white font-semibold px-6 py-2.5 rounded-xl transition-all duration-200
+           shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 hover:scale-[1.02]
+           active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100;
+  }
+  .btn-secondary {
+    @apply bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700
+           text-slate-700 dark:text-slate-300 font-medium px-6 py-2.5 rounded-xl
+           transition-all duration-200 border border-slate-200 dark:border-slate-700;
+  }
+  .btn-ghost {
+    @apply hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400
+           font-medium px-4 py-2 rounded-xl transition-all duration-200;
+  }
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700
+           bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100
+           placeholder-slate-400 dark:placeholder-slate-500
+           focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500
+           transition-all duration-200;
+  }
+  .card {
+    @apply bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800
+           shadow-sm hover:shadow-md transition-shadow duration-200;
+  }
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium;
+  }
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-600 to-violet-600 bg-clip-text text-transparent;
+  }
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.slate.300') transparent;
+  }
+  .dark .scrollbar-thin {
+    scrollbar-color: theme('colors.slate.600') transparent;
+  }
+}
+
+@layer utilities {
+  .animate-in { animation: fadeIn 0.3s ease-out; }
+  .slide-up { animation: slideUp 0.4s ease-out; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+.dark ::-webkit-scrollbar-thumb { background: #475569; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* Loading shimmer */
+.shimmer {
+  background: linear-gradient(90deg, transparent 25%, rgba(255,255,255,0.4) 50%, transparent 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+.dark .shimmer {
+  background: linear-gradient(90deg, transparent 25%, rgba(255,255,255,0.05) 50%, transparent 75%);
+  background-size: 200% 100%;
+}
