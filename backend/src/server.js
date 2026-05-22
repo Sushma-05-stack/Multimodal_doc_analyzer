@@ -27,7 +27,16 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      const allowed = [
+        process.env.FRONTEND_URL || 'http://localhost:5173',
+        'http://localhost:5173',
+        /\.vercel\.app$/,
+      ];
+      const ok = allowed.some(o => typeof o === 'string' ? o === origin : o.test(origin));
+      callback(null, ok);
+    },
     methods: ['GET', 'POST'],
     credentials: true
   }
@@ -47,8 +56,22 @@ const limiter = rateLimit({
 app.use('/api/', limiter);
 
 // CORS
+const allowedOrigins = [
+  process.env.FRONTEND_URL || 'http://localhost:5173',
+  'http://localhost:5173',
+  'http://localhost:3000',
+  /\.vercel\.app$/,   // any Vercel preview/production URL
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true); // allow non-browser requests
+    const allowed = allowedOrigins.some(o =>
+      typeof o === 'string' ? o === origin : o.test(origin)
+    );
+    if (allowed) return callback(null, true);
+    callback(new Error(`CORS blocked: ${origin}`));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization']

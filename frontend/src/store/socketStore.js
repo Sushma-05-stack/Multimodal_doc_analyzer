@@ -9,7 +9,9 @@ export const useSocketStore = create((set, get) => ({
 
   connect: (token) => {
     if (get().socket?.connected) return;
-    const socket = io('/', { auth: { token }, transports: ['websocket', 'polling'] });
+    // In production use Render backend URL, in dev use same origin
+    const serverUrl = import.meta.env.VITE_API_URL || window.location.origin;
+    const socket = io(serverUrl, { auth: { token }, transports: ['websocket', 'polling'] });
 
     socket.on('connect', () => {
       set({ connected: true });
